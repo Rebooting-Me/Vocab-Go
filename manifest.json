@@ -12,8 +12,13 @@
         },
 
         "default_popup": "index.html",
-        "default_title": "Here comes the definition!"
+        "default_title": "Vocab Go"
         
+    },
+
+    "externally_connectable": {
+        "ids": ["fepopbgajpglddmoflgpdddlfamebkfe"],
+        "matches": ["<all_urls>"]
     },
 
     "icons" : {
@@ -27,6 +32,8 @@
         "matches": ["<all_urls>"],
         "js": ["content.js"]
     }],
+
+    "accepts_tls_channel_id": false,
 
     "background": {
         "service_worker": "background.js"
