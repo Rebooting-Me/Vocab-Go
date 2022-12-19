@@ -6,3 +6,4 @@ function receiver(request, sender, sendResponse) {
   selectedWord = request.text
   console.log(selectedWord)
 }
+

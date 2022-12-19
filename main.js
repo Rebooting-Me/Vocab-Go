@@ -25,7 +25,7 @@ let worD = bgPage.selectedWord*/
 let worD = bgPage.selectedWord
 console.log(worD)*/
 
-word.innerHTML = "proclivity" // Type the word here!
+word.innerHTML = "punctual" // Type the word here!
 word = word.innerHTML
 title.innerHTML = word;
 
