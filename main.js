@@ -1,10 +1,4 @@
-let word = document.getElementById("look-up")
-let pronounciation = document.getElementById("word-pro")
-let wordType = document.getElementById("word-type")
-let defining = document.getElementById("info")
-let audio = document.getElementById("myAudio")
-let title = document.querySelector("title")
-var x = document.getElementById("option");
+// import { variable } from './background.js';
 
 /*let bgPage = chrome.extension.getBackgroundPage();
 let worD = bgPage.selectedWord*/
@@ -25,14 +19,22 @@ let worD = bgPage.selectedWord*/
 let worD = bgPage.selectedWord
 console.log(worD)*/
 
-word.innerHTML = "punctual" // Type the word here!
+let word = document.getElementById("look-up");
+let pronounciation = document.getElementById("word-pro");
+let wordType = document.getElementById("word-type");
+let defining = document.getElementById("info");
+let audio = document.getElementById("myAudio");
+let title = document.querySelector("title");
+var x = document.getElementById("option");
+
+word.innerHTML = "ramifications" // Type the word here!
 word = word.innerHTML
 title.innerHTML = word;
 
 let url = `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`
 
 
-async function getDefintion(){
+async function getDefinition(){
     const response = await fetch(url);
     const data = await response.json();
     //console.log(data[0].phonetics[0].text);
@@ -81,7 +83,7 @@ function playAudio() {
     audio.play(); 
 }
 
-getDefintion();
+getDefinition();
 
 /*window.addEventListener('mouseup', wordSelected) /////////// GETS THE SELECTED WORD
 

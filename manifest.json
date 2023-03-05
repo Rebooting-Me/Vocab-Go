@@ -27,6 +27,16 @@
         "64": "64.png",
         "128": "128.png"
     },
+    
+    "commands": {
+    "open-popup": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+Q",
+        "mac": "MacCtrl+Shift+Q"
+      },
+      "description": "Open the popup with word definitions"
+    }
+  },
 
     "content_scripts": [{
         "matches": ["<all_urls>"],
@@ -39,7 +49,7 @@
         "service_worker": "background.js"
     },
     
-    "permissions": ["storage"]
+    "permissions": ["storage", "activeTab", "declarativeContent", "https://api.dictionaryapi.dev/api/v2/entries/en/", "https://dictionaryapi.dev/"]
     
 }
 
