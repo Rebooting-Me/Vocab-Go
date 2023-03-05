@@ -18,43 +18,109 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     // ...
 
     const styles = `
-      /* Insert your CSS styles here */
-.container {
-    background-color: transparent;
-    border: 3px solid black;
-    max-width: 400px;
-    height: 350px;
-    border-radius: 20px;
-    box-shadow: 5px 5px 20px black;
-}
+      .container_acha {
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          background-color: black;
+          border: 3px solid black;
+          max-width: 450px;
+          max-height: auto;
+          border-radius: 20px;
+          box-shadow: 5px 5px 20px black;
+          z-index: 100000;
+      }
 
-.header {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    border-radius: 16px 16px 0 0;
-    padding: 0px 8px 0 8px;
-    box-shadow: 0px 4px 6px -2px rgba(0,0,0,0.75);
-    color: black;
-}
+      .header_acha {
+          display: flex;
+          justify-content: center;
+          flex-direction: column;
+          border-radius: 16px 16px 0 0;
+          padding: 0 8px 0 10px;
+          color: black;
+          max-width: 100%;
+          max-height: auto;
+          background-color: white;
+      }
+      .details_acha{
+        display:flex;
+        gap: 20px;
+        margin: 0 0 8px 0;
+      }
+      .phonetic_acha {
+        box-shadow: 3px 3px 10px -3px rgba(0,0,0,0.75);
+        max-width: fit-content;
+        border: 1px solid black;
+        padding: 0 4px;
+        border-radius: 0 8px 0 8px;
+        font-size: medium;
+      }
+      #p1_acha {
+        font-size: xx-large;
+        font-weight: bold;
+        padding: 0;
+        margin-top: 0;
+        font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      }
+      #p2_acha {
+        color: white;
+        font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: large;
+        font-weight: bold;
+        margin: 0;
+        padding: 5px 0 0 10px;
+        max-width: fit-content;
+      }
+      .middle_acha {
+        margin-top: 2px;
+        max-width: fit-content;
+        max-height: fit-content;
+        padding: 0 10px 10px 10px;
+      }
+      #p3_acha {
+        color: white;
+        font-size: large;
+        font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      }
+  
+      .overlay_acha {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: transparent;
+        z-index: 99999;
+        backdrop-filter: blur(1.5px);
+      }
     `;
 
     const styleElement = document.createElement("style");
     styleElement.textContent = styles;
-    document.head.appendChild(styleElement);
     const popupHTML = document.createElement('div');
+    const overlay = document.createElement("div");
+    overlay.classList.add("overlay_acha");
     popupHTML.innerHTML = `
-      <main class="container">
-        <div class="header" style="max-width: 100%; max-height: fit-content; background-color: white;">
-            <h1 style="font-weight: bold; padding: 0; margin-top: 0; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">${selectedWord}</h1>            
-            <div class="details" style="display:flex; gap: 20px; margin-bottom: 8px">
-                <div class="phonetic" style="box-shadow: 3px 3px 10px -3px rgba(0,0,0,0.75); max-width: fit-content; border: 1px solid black; padding: 2px 4px; border-radius: 0 8px 0 8px;">${result.phonetics[0].text}</div>
-                <div class="phonetic" style="box-shadow: 3px 3px 10px -3px rgba(0,0,0,0.75); max-width: fit-content; border: 1px solid black; padding: 2px 4px; border-radius: 0 8px 0 8px;">${result.meanings[0].partOfSpeech}</div>
+      <main class="container_acha">
+        <div class="header_acha">
+            <p id="p1_acha">${selectedWord}</p>            
+            <div class="details_acha">
+                <div class="phonetic_acha">${result.phonetics[0].text}</div>
+                <div class="phonetic_acha">${result.meanings[0].partOfSpeech}</div>
             </div>
         </div>
-        <div id="line" style="width: 100%; border: 1.5px solid black;"></div>
+        <div>
+          <p id="p2_acha">Definition:</p>
+          <div class="middle_acha">
+              <p id="p3_acha">${result.meanings[0].definition}</p>
+          </div>
+        </div>
     </main>
     `;
+    popupHTML.classList.add("popupHTML");
+    popupHTML.appendChild(styleElement);
+    document.body.appendChild(overlay);
     document.body.appendChild(popupHTML);
   }
 });
