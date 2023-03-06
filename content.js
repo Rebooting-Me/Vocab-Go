@@ -28,7 +28,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     const bottom = request.bottom;
     const left = request.left;
     console.log(selectedWord);
-    console.log(result);
     // Display the selected word in a popup on the current webpage
     // You can use the DOM API to create the popup and display the word
     // ...
@@ -69,6 +68,17 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         padding: 0 4px;
         border-radius: 0 8px 0 8px;
         font-size: medium;
+        transition: transform 0.1s ease-in-out;
+      }
+      .phonetic_acha:hover {
+        transform: translateY(-3px) !important;
+      }
+      .pehla_anchor_acha {
+        text-decoration: none;
+        color: inherit
+      }
+      .pehla_anchor_acha:hover {
+        text-decoration: none;
       }
       #p1_acha {
         font-size: xx-large;
@@ -106,8 +116,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         <div class="header_acha">
             <p id="p1_acha">${selectedWord}</p>            
             <div class="details_acha">
-                <div class="phonetic_acha">${result.phonetics[0].text}</div>
-                <div class="phonetic_acha">${result.meanings[0].partOfSpeech}</div>
+                <div class="phonetic_acha"><a class="pehla_anchor_acha" href=${result.sourceUrl} target="blank">${result.phonetics[0].text}</a></div>
+                <div class="phonetic_acha"><a class="pehla_anchor_acha" href=${result.sourceUrl} target="blank">${result.meanings[0].partOfSpeech}</a></div>
             </div>
         </div>
         <div>
