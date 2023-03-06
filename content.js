@@ -1,9 +1,21 @@
 // Listen to the selected word
 document.addEventListener('mouseup', (event) => {
   const selectedWord = window.getSelection().toString().trim();
-  if (selectedWord.length > 0) {
+  const selection = window.getSelection();
+
+  if (!selection.isCollapsed &&/\S/.test(selection.toString()) &&selectedWord.length > 0) {
+    console.log("selection:", selection);
+    const range = selection.getRangeAt(0);
+    console.log("range:", range);
+    const rect = range.getBoundingClientRect();
+    console.log('rect:', rect);
     // Send the selected word to the background script
-    chrome.runtime.sendMessage({ type: 'word_selected', word: selectedWord });
+    chrome.runtime.sendMessage({
+      type: "word_selected",
+      word: selectedWord,
+      bottom: rect.bottom,
+      left: rect.left
+    });
   }
 });
 
@@ -11,6 +23,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.type === 'display_popup') {
     const selectedWord = request.word;
     const result = request.result;
+    const bottom = request.bottom;
+    const left = request.left;
     console.log(selectedWord);
     console.log(result);
     // Display the selected word in a popup on the current webpage
@@ -20,9 +34,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     const styles = `
       .container_acha {
           position: fixed;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
           background-color: black;
           border: 3px solid black;
           max-width: 450px;
@@ -92,13 +103,12 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         height: 100%;
         background-color: transparent;
         z-index: 99999;
-        backdrop-filter: blur(1.5px);
       }
     `;
 
     const styleElement = document.createElement("style");
     styleElement.textContent = styles;
-    const popupHTML = document.createElement('div');
+    const popupHTML = document.createElement("div");
     const overlay = document.createElement("div");
     overlay.classList.add("overlay_acha");
     popupHTML.innerHTML = `
@@ -118,9 +128,44 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         </div>
     </main>
     `;
+    const container = popupHTML.querySelector(".container_acha");
+
     popupHTML.classList.add("popupHTML");
     popupHTML.appendChild(styleElement);
     document.body.appendChild(overlay);
     document.body.appendChild(popupHTML);
+
+    // Get the dimensions of the viewport
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+
+    // Calculate the position of the popup relative to the viewport
+    const popupWidth = container.offsetWidth;
+    const popupHeight = container.offsetHeight;
+    const popupTop = bottom + 10; // Add some padding between the selected word and the popup
+    const popupLeft = left - popupWidth / 2;
+
+    // Check if the popup goes outside the viewport and adjust it if needed
+    if (popupLeft < 0) {
+      container.style.left = 0;
+    } else if (popupLeft + popupWidth > viewportWidth) {
+      container.style.left = viewportWidth - popupWidth + "px";
+    } else {
+      container.style.left = popupLeft + "px";
+    }
+
+    if (popupTop + popupHeight > viewportHeight) {
+      container.style.top = viewportHeight - popupHeight + "px";
+    } else {
+      container.style.top = popupTop + "px";
+    }
+
+    // Remove the popup when the user clicks outside of it
+    document.addEventListener("click", function (event) {
+      if (!popupHTML.contains(event.target)) {
+        popupHTML.remove();
+        window.removeEventListener("scroll", null);
+      }
+    });
   }
 });
