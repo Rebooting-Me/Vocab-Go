@@ -1,6 +1,7 @@
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.type === 'word_selected') {
     const selectedWord = request.word;
+    const top = request.top;
     const bottom = request.bottom;
     const left = request.left;
     console.log(selectedWord)
@@ -34,7 +35,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         const result = { phonetics, meanings, sourceUrl };
         // Send the selected word data back to the content script to display in a popup
         chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-          chrome.tabs.sendMessage(tabs[0].id, { type: 'display_popup', result: result, word: selectedWord, bottom: bottom, left: left});
+          chrome.tabs.sendMessage(tabs[0].id, { type: 'display_popup', result: result, word: selectedWord, top: top, bottom: bottom, left: left});
         });
       })
       .catch(error => console.error(error));

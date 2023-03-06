@@ -13,6 +13,7 @@ document.addEventListener('mouseup', (event) => {
     chrome.runtime.sendMessage({
       type: "word_selected",
       word: selectedWord,
+      top: rect.top,
       bottom: rect.bottom,
       left: rect.left
     });
@@ -23,6 +24,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.type === 'display_popup') {
     const selectedWord = request.word;
     const result = request.result;
+    const top = request.top;
     const bottom = request.bottom;
     const left = request.left;
     console.log(selectedWord);
@@ -32,7 +34,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     // ...
 
     const styles = `
-      .container_acha {
+      .popupHTML {
           position: fixed;
           background-color: black;
           border: 3px solid black;
@@ -112,7 +114,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     const overlay = document.createElement("div");
     overlay.classList.add("overlay_acha");
     popupHTML.innerHTML = `
-      <main class="container_acha">
         <div class="header_acha">
             <p id="p1_acha">${selectedWord}</p>            
             <div class="details_acha">
@@ -126,9 +127,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
               <p id="p3_acha">${result.meanings[0].definition}</p>
           </div>
         </div>
-    </main>
     `;
-    const container = popupHTML.querySelector(".container_acha");
 
     popupHTML.classList.add("popupHTML");
     popupHTML.appendChild(styleElement);
@@ -140,24 +139,24 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     const viewportHeight = window.innerHeight;
 
     // Calculate the position of the popup relative to the viewport
-    const popupWidth = container.offsetWidth;
-    const popupHeight = container.offsetHeight;
+    const popupWidth = popupHTML.offsetWidth;
+    const popupHeight = popupHTML.offsetHeight;
     const popupTop = bottom + 10; // Add some padding between the selected word and the popup
     const popupLeft = left - popupWidth / 2;
 
     // Check if the popup goes outside the viewport and adjust it if needed
     if (popupLeft < 0) {
-      container.style.left = 0;
+      popupHTML.style.left = 0;
     } else if (popupLeft + popupWidth > viewportWidth) {
-      container.style.left = viewportWidth - popupWidth + "px";
+      popupHTML.style.left = viewportWidth - popupWidth + "px";
     } else {
-      container.style.left = popupLeft + "px";
+      popupHTML.style.left = popupLeft + "px";
     }
 
     if (popupTop + popupHeight > viewportHeight) {
-      container.style.top = viewportHeight - popupHeight + "px";
+      popupHTML.style.top = viewportHeight - popupHeight + "px";
     } else {
-      container.style.top = popupTop + "px";
+      popupHTML.style.top = popupTop + "px";
     }
 
     // Remove the popup when the user clicks outside of it
