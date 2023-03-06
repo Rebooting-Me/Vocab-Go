@@ -23,12 +23,16 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         });
         const phonetics = [];
         data.forEach((entry) => {
+          const text = entry.phonetic;
+          phonetics.push({text});
+        });
+        data.forEach((entry) => {
           entry.phonetics.forEach((phonetic) => {
             const audio =
               phonetic.audio ||
               (entry.phonetics.length > 1 ? entry.phonetics[1].audio : "");
-            const text = phonetic.text;
-            phonetics.push({ text, audio });
+            // const text = phonetic.text;
+            phonetics.push({ audio });
           });
         });
         const sourceUrl = data[0].sourceUrls[0];

@@ -36,7 +36,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     const styles = `
       .popupHTML {
           position: fixed;
-          background-color: black;
+          background-color: #1A1E27;
           border: 3px solid black;
           max-width: 450px;
           max-height: auto;
@@ -49,12 +49,13 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
           display: flex;
           justify-content: center;
           flex-direction: column;
-          border-radius: 16px 16px 0 0;
+          border-radius: 16px;
           padding: 0 8px 0 10px;
           color: black;
           max-width: 100%;
           max-height: auto;
           background-color: white;
+          box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
       }
       .details_acha{
         display:flex;
@@ -96,23 +97,11 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         font-size: large;
         font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       }
-  
-      .overlay_acha {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: transparent;
-        z-index: 99999;
-      }
     `;
 
     const styleElement = document.createElement("style");
     styleElement.textContent = styles;
     const popupHTML = document.createElement("div");
-    const overlay = document.createElement("div");
-    overlay.classList.add("overlay_acha");
     popupHTML.innerHTML = `
         <div class="header_acha">
             <p id="p1_acha">${selectedWord}</p>            
@@ -122,7 +111,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             </div>
         </div>
         <div>
-          <p id="p2_acha">Definition:</p>
+          <p id="p2_acha">Definition :</p>
           <div class="middle_acha">
               <p id="p3_acha">${result.meanings[0].definition}</p>
           </div>
@@ -131,7 +120,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
     popupHTML.classList.add("popupHTML");
     popupHTML.appendChild(styleElement);
-    document.body.appendChild(overlay);
     document.body.appendChild(popupHTML);
 
     // Get the dimensions of the viewport
