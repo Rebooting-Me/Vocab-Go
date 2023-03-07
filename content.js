@@ -1,33 +1,39 @@
+// color palette dark:#5B3758; less dark:#C65B7C; light:#F9627D; lighter:#F9ADA0; green:#83B692
+
 // Listen to the selected word
-document.addEventListener('mouseup', (event) => {
+document.addEventListener("mouseup", (event) => {
   const selectedWord = window.getSelection().toString().trim();
   const selection = window.getSelection();
 
-  if (!selection.isCollapsed &&/\S/.test(selection.toString()) &&selectedWord.length > 0) {
+  if (
+    !selection.isCollapsed &&
+    /\S/.test(selection.toString()) &&
+    selectedWord.length > 0
+  ) {
     console.log("selection:", selection);
     const range = selection.getRangeAt(0);
     console.log("range:", range);
     const rect = range.getBoundingClientRect();
-    console.log('rect:', rect);
+    console.log("rect:", rect);
     // Send the selected word to the background script
     chrome.runtime.sendMessage({
       type: "word_selected",
       word: selectedWord,
       top: rect.top,
       bottom: rect.bottom,
-      left: rect.left
+      left: rect.left,
     });
   }
 });
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.type === 'display_popup') {
+  if (request.type === "display_popup") {
     const selectedWord = request.word;
     const result = request.result;
     const top = request.top;
     const bottom = request.bottom;
     const left = request.left;
-    console.log(selectedWord);
+    console.log(selectedWord, result.phonetics[1].audio);
     // Display the selected word in a popup on the current webpage
     // You can use the DOM API to create the popup and display the word
     // ...
@@ -54,7 +60,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
           max-width: 100%;
           max-height: auto;
           background-color: white;
-          box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+          box-shadow: 5px 5px 20px black;
       }
       .details_acha{
         display:flex;
@@ -71,7 +77,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         transition: transform 0.1s ease-in-out;
       }
       .phonetic_acha:hover {
-        transform: translateY(-3px) !important;
+        transform: translateY(-3px) !important;\
+        color: #C65B7C !important;
       }
       .pehla_anchor_acha {
         text-decoration: none;
@@ -116,9 +123,13 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         <div class="header_acha">
             <p id="p1_acha">${selectedWord}</p>            
             <div class="details_acha">
-                <div class="phonetic_acha"><a class="pehla_anchor_acha" href=${result.sourceUrl} target="blank">${result.phonetics[0].text}</a></div>
-                <div class="phonetic_acha"><a class="pehla_anchor_acha" href=${result.sourceUrl} target="blank">${result.meanings[0].partOfSpeech}</a></div>
-            </div>
+                <div class="phonetic_acha"><a class="pehla_anchor_acha" href=${
+                  result.sourceUrl
+                } target="blank">${result.phonetics[0].text}</a></div>
+                <div class="phonetic_acha"><a class="pehla_anchor_acha" href=${
+                  result.sourceUrl
+                } target="blank">${result.meanings[0].partOfSpeech}</a></div>
+                </div>
         </div>
         <div>
           <p id="p2_acha">Definition :</p>
@@ -127,7 +138,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
           </div>
         </div>
     `;
-
+    
     popupHTML.classList.add("popupHTML");
     popupHTML.appendChild(styleElement);
     document.body.appendChild(popupHTML);
