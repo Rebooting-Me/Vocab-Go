@@ -37,16 +37,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     // Display the selected word in a popup on the current webpage
     // You can use the DOM API to create the popup and display the word
     // ...
-    let source = '';
-    var i = 0;
-        while (i <= result.phonetics.length) {
-          if (result.phonetics[i].audio) {
-            source = result.phonetics[i].audio;
-            break;
-          }else{
-            i += 1;
-          }
-        }
 
     const styles = `
       .popupHTML {
