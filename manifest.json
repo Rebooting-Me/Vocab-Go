@@ -42,6 +42,10 @@
         "matches": ["<all_urls>"],
         "js": ["content.js"]
     }],
+    "web_accessible_resources": [{
+    "matches": ["<all_urls>"],
+    "resources": ["cancel.svg"]
+}],
 
     "accepts_tls_channel_id": false,
 

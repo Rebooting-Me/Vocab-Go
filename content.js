@@ -77,7 +77,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         transition: transform 0.1s ease-in-out;
       }
       .phonetic_acha:hover {
-        transform: translateY(-3px) !important;\
+        transform: translateY(-3px) !important;
         color: #C65B7C !important;
       }
       .pehla_anchor_acha {
@@ -114,6 +114,20 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         font-size: large;
         font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       }
+      #button1_acha {
+        transition: 0.1s ease-in-out;
+        margin: 0 0 20px 20px;
+        padding: 0;
+        text-decoration:none;
+        border: none;
+        background-color: transparent;
+      }
+      #button1_acha:hover {
+        transform: scale(1.11) !important;
+      }
+      #button1_acha:active {
+        transform: translateY(3px) !important;
+      }
     `;
 
     const styleElement = document.createElement("style");
@@ -121,7 +135,12 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     const popupHTML = document.createElement("div");
     popupHTML.innerHTML = `
         <div class="header_acha">
-            <p id="p1_acha">${selectedWord}</p>            
+            <div style="display: flex; justify-content: space-between;">
+                <p id="p1_acha">${selectedWord}</p>
+                <button id="button1_acha"><img style="width: 1.8rem;" src=${chrome.runtime.getURL(
+                  "cancel.svg"
+                )} alt="image" ></button>
+            </div>          
             <div class="details_acha">
                 <div class="phonetic_acha"><a class="pehla_anchor_acha" href=${
                   result.sourceUrl
@@ -129,7 +148,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                 <div class="phonetic_acha"><a class="pehla_anchor_acha" href=${
                   result.sourceUrl
                 } target="blank">${result.meanings[0].partOfSpeech}</a></div>
-                </div>
+            </div>
         </div>
         <div>
           <p id="p2_acha">Definition :</p>
@@ -167,6 +186,14 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     } else {
       popupHTML.style.top = popupTop + "px";
     }
+
+    const close = document.querySelector('#button1_acha');
+    close.addEventListener('mouseup', () => {
+      const selection = window.getSelection();
+      selection.removeAllRanges();
+      popupHTML.remove();
+      window.removeEventListener("scroll", null);
+    })
 
     // Remove the popup when the user clicks outside of it
     document.addEventListener("click", function (event) {
