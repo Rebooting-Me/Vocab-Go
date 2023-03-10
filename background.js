@@ -1,13 +1,13 @@
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.type === 'word_selected') {
+  if (request.type === "word_selected") {
     const selectedWord = request.word;
     const top = request.top;
     const bottom = request.bottom;
     const left = request.left;
-    console.log(selectedWord)
+    console.log(selectedWord);
     fetch("https://api.dictionaryapi.dev/api/v2/entries/en/" + selectedWord)
-      .then(response => response.json())
-      .then(data => {
+      .then((response) => response.json())
+      .then((data) => {
         const meanings = [];
         data.forEach((entry) => {
           entry.meanings.forEach((meaning) => {
@@ -35,15 +35,21 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             phonetics.push({ audio });
           });
         });
-        
+
         const sourceUrl = data[0].sourceUrls[0];
-        const result = { phonetics, meanings, sourceUrl};
+        const result = { phonetics, meanings, sourceUrl };
         // Send the selected word data back to the content script to display in a popup
         chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-          chrome.tabs.sendMessage(tabs[0].id, { type: 'display_popup', result: result, word: selectedWord, top: top, bottom: bottom, left: left});
+          chrome.tabs.sendMessage(tabs[0].id, {
+            type: "display_popup",
+            result: result,
+            word: selectedWord,
+            top: top,
+            bottom: bottom,
+            left: left,
+          });
         });
       })
-      .catch(error => console.error(error));
-    
+      .catch((error) => console.error(error));
   }
 });

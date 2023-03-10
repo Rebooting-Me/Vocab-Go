@@ -204,3 +204,15 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     });
   }
 });
+
+let timeoutID = null;
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.type === "reset_timeout") {
+    console.log("resetting timeout");
+    clearTimeout(timeoutID);
+    timeoutID = setTimeout(() => {
+      chrome.runtime.sendMessage({ type: "clear_cache" });
+    }, 1000 * 60 * 5); // Clear cache after 5 minutes of inactivity
+  }
+});
