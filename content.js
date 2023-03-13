@@ -34,104 +34,12 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     const bottom = request.bottom;
     const left = request.left;
     console.log(selectedWord);
-    // Display the selected word in a popup on the current webpage
-    // You can use the DOM API to create the popup and display the word
-    // ...
 
-    const styles = `
-      .popupHTML {
-          position: fixed;
-          background-color: #1A1E27;
-          border: 3px solid black;
-          max-width: 450px;
-          max-height: auto;
-          border-radius: 20px;
-          box-shadow: 5px 5px 20px black;
-          z-index: 100000;
-      }
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = chrome.runtime.getURL("styles.css");
+    document.head.appendChild(link);
 
-      .header_acha {
-          display: flex;
-          justify-content: center;
-          flex-direction: column;
-          border-radius: 16px;
-          padding: 0 8px 0 10px;
-          color: black;
-          max-width: 100%;
-          max-height: auto;
-          background-color: white;
-          box-shadow: 5px 5px 20px black;
-      }
-      .details_acha{
-        display:flex;
-        gap: 20px;
-        margin: 0 0 8px 0;
-      }
-      .phonetic_acha {
-        box-shadow: 3px 3px 10px -3px rgba(0,0,0,0.75);
-        max-width: fit-content;
-        border: 1px solid black;
-        padding: 0 4px;
-        border-radius: 0 8px 0 8px;
-        font-size: medium;
-        transition: transform 0.1s ease-in-out;
-      }
-      .phonetic_acha:hover {
-        transform: translateY(-3px) !important;
-        color: #C65B7C !important;
-      }
-      .pehla_anchor_acha {
-        text-decoration: none;
-        color: inherit
-      }
-      .pehla_anchor_acha:hover {
-        text-decoration: none;
-      }
-      #p1_acha {
-        font-size: xx-large;
-        font-weight: bold;
-        padding: 0;
-        margin-top: 0;
-        font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      }
-      #p2_acha {
-        color: white;
-        font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        font-size: large;
-        font-weight: bold;
-        margin: 0;
-        padding: 5px 0 0 10px;
-        max-width: fit-content;
-      }
-      .middle_acha {
-        margin-top: 2px;
-        max-width: fit-content;
-        max-height: fit-content;
-        padding: 0 10px 10px 10px;
-      }
-      #p3_acha {
-        color: white;
-        font-size: large;
-        font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      }
-      #button1_acha {
-        transition: 0.1s ease-in-out;
-        margin: 0 0 20px 20px;
-        padding: 0;
-        text-decoration:none;
-        border: none;
-        background-color: transparent;
-      }
-      #button1_acha:hover {
-        transform: scale(1.11) !important;
-      }
-      #button1_acha:active {
-        transform: translateY(3px) !important;
-      }
-    `;
-
-    const styleElement = document.createElement("style");
-    styleElement.textContent = styles;
     const popupHTML = document.createElement("div");
     popupHTML.innerHTML = `
         <div class="header_acha">
@@ -157,9 +65,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
           </div>
         </div>
     `;
-    
+
     popupHTML.classList.add("popupHTML");
-    popupHTML.appendChild(styleElement);
     document.body.appendChild(popupHTML);
 
     // Get the dimensions of the viewport
@@ -187,13 +94,13 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       popupHTML.style.top = popupTop + "px";
     }
 
-    const close = document.querySelector('#button1_acha');
-    close.addEventListener('mouseup', () => {
+    const close = document.querySelector("#button1_acha");
+    close.addEventListener("mouseup", () => {
       const selection = window.getSelection();
       selection.removeAllRanges();
       popupHTML.remove();
       window.removeEventListener("scroll", null);
-    })
+    });
 
     // Remove the popup when the user clicks outside of it
     document.addEventListener("click", function (event) {
