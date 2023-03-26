@@ -46,6 +46,17 @@
       .pehla_anchor_acha:hover {
         text-decoration: none;
       }
+      #button2_acha {
+        margin-left: 20px;
+        text-decoration: none;
+        padding: 0; 
+        border: none;
+        background-color: transparent;
+        transition: transform 0.1s ease-in-out;
+      }
+      #button2_acha:hover {
+        transform: translateY(-3px) !important;
+      }
       #p1_acha {
         font-size: xx-large;
         font-weight: bold;

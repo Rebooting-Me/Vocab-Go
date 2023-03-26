@@ -30,16 +30,22 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.type === "display_popup") {
     const selectedWord = request.word;
     const result = request.result;
-    const top = request.top;
     const bottom = request.bottom;
     const left = request.left;
-    console.log(selectedWord);
+
+    let audio = [];
+    // to check if audio file is present
+    for (let i = 0; i < result.phonetics.length; i++) {
+      if (result.phonetics[i].audio !== undefined) {
+        audio.push(result.phonetics[i].audio);
+      }
+    }
 
     const link = document.createElement("link");
     link.rel = "stylesheet";
     link.href = chrome.runtime.getURL("styles.css");
     document.head.appendChild(link);
-
+    
     const popupHTML = document.createElement("div");
     popupHTML.innerHTML = `
         <div class="header_acha">
@@ -48,15 +54,20 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                 <button id="button1_acha"><img style="width: 1.8rem;" src=${chrome.runtime.getURL(
                   "cancel.svg"
                 )} alt="image" ></button>
-            </div>          
-            <div class="details_acha">
-                <div class="phonetic_acha"><a class="pehla_anchor_acha" href=${
-                  result.sourceUrl
-                } target="blank">${result.phonetics[0].text}</a></div>
-                <div class="phonetic_acha"><a class="pehla_anchor_acha" href=${
-                  result.sourceUrl
-                } target="blank">${result.meanings[0].partOfSpeech}</a></div>
             </div>
+            <div class="details_wrapper_acha" style="display: flex;">
+                <div class="details_acha">
+                  <div class="phonetic_acha"><a class="pehla_anchor_acha" href=${
+                    result.sourceUrl
+                  } target="blank">${result.phonetics[0].text}</a></div>
+                  <div class="phonetic_acha"><a class="pehla_anchor_acha" href=${
+                    result.sourceUrl
+                  } target="blank">${result.meanings[0].partOfSpeech}</a></div>
+                </div>
+                <button id="button2_acha"><img src=${chrome.runtime.getURL(
+                  "speaker.svg"
+                )} alt="speaker-image"></button>
+            </div>       
         </div>
         <div>
           <p id="p2_acha">Definition :</p>
