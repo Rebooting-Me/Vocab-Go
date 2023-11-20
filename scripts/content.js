@@ -64,9 +64,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                     result.sourceUrl
                   } target="blank">${result.meanings[0].partOfSpeech}</a></div>
                 </div>
-                <button id="button2_acha"><img src=${chrome.runtime.getURL(
-                  "speaker.svg"
-                )} alt="speaker-image"></button>
             </div>       
         </div>
         <div>
@@ -134,3 +131,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     }, 1000 * 60 * 5); // Clear cache after 5 minutes of inactivity
   }
 });
+
+
+{/* <button id="button2_acha"><img src=${chrome.runtime.getURL(
+                  "speaker.svg"
+)} alt="speaker-image"></button> */}
